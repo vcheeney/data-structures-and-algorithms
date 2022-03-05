@@ -1,9 +1,11 @@
 /*
+  In-place merge sort
   https://www.youtube.com/watch?v=KF2j-9iSf4Q
 
   Uses the divide-and-conquer concept
 
   Time complexity:
+  Best: O(n*log(n))
   Avg: O(n*log(n))
   Worst: O(n*log(n))
 
