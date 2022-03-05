@@ -1,5 +1,5 @@
 /*
-  In-place merge sort
+  Merge sort
   https://www.youtube.com/watch?v=KF2j-9iSf4Q
 
   Uses the divide-and-conquer concept
@@ -17,66 +17,35 @@
   O(n) because we need to copy elements into a new array...
 */
 
-export function mergeSort(array: number[]) {
-  mergeSortRec(array, 0, array.length - 1);
-}
-
-function mergeSortRec(array: number[], leftStart: number, rightStart: number) {
-  // If the left start is after or equal to the right start, there are no numbers to sort
-  if (leftStart >= rightStart) {
-    return;
+export function mergeSort(array: number[]): number[] {
+  if (array.length === 1) {
+    return array;
+  } else {
+    const mid = Math.floor(array.length / 2);
+    const leftSide = array.slice(0, mid); // 0 to mid - 1
+    const rightSide = array.slice(mid); // mid to array.length - 1
+    return merge(mergeSort(leftSide), mergeSort(rightSide));
   }
-
-  // Find the mid point
-  const mid = Math.floor((leftStart + rightStart) / 2);
-
-  // Soft the left side
-  mergeSortRec(array, leftStart, mid);
-
-  // Sort the right side
-  mergeSortRec(array, mid + 1, rightStart);
-
-  // Merge the halves
-  mergeHalves(array, leftStart, rightStart);
 }
 
-function mergeHalves(array: number[], leftStart: number, rightEnd: number) {
-  const temp = [];
-  const leftEnd = Math.floor((rightEnd + leftStart) / 2);
-  const rightStart = leftEnd + 1;
+function merge(leftArray: number[], rightArray: number[]) {
+  const result = [];
+  let leftIndex = 0;
+  let rightIndex = 0;
 
-  let left = leftStart;
-  let right = rightStart;
-  let mergeIndex = leftStart;
-
-  while (left <= leftEnd && right <= rightEnd) {
-    if (array[left] < array[right]) {
-      temp[mergeIndex] = array[left];
-      left++;
+  while (leftIndex < leftArray.length && rightIndex < rightArray.length) {
+    if (leftArray[leftIndex] < rightArray[rightIndex]) {
+      result.push(leftArray[leftIndex]);
+      leftIndex++;
     } else {
-      temp[mergeIndex] = array[right];
-      right++;
+      result.push(rightArray[rightIndex]);
+      rightIndex++;
     }
-    mergeIndex++;
   }
 
-  // Transfer the remainder already sorted elements
-  // (either the right or left part will have any)
-  for (let i = left; i <= leftEnd; i++) {
-    temp[mergeIndex] = array[i];
-    mergeIndex++;
-  }
-
-  for (let i = right; i <= rightEnd; i++) {
-    temp[mergeIndex] = array[i];
-    mergeIndex++;
-  }
-
-  // Copy the elements back into the original array
-  for (let i = leftStart; i <= rightEnd; i++) {
-    array[i] = temp[i];
-  }
+  return [
+    ...result,
+    ...leftArray.slice(leftIndex),
+    ...rightArray.slice(rightIndex),
+  ];
 }
-
-const arr = [1, 15, 6, 9, 3, 42, 21];
-mergeSort(arr);
