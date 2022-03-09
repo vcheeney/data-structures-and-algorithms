@@ -30,5 +30,5 @@ function minOperations(arr) {
   throw new Error("Unsolvable");
 }
 
-const res = minOperations([3, 1 2]);
+const res = minOperations([3, 1, 2]);
 console.log("res: ", res);
