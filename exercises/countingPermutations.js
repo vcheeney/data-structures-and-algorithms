@@ -1,51 +1,39 @@
-const dict = {};
+function minOperations(arr) {
+  const desiredOutput = [...arr].sort((a, b) => a - b).join(",");
 
-function computePermutations(P) {
-  const desiredOutput = [...P].sort((a, b) => a - b).join(",");
-  while (true) {
-    let curPerm = Object.keys(dict).reduce((res, curKey) => {
-      return dict[curKey] > dict[res] ? curKey : res;
-    }, P);
+  const visited = {};
+  const queue = [[arr, 0]];
 
-    curPerm = typeof curPerm === "string" ? curPerm.split(",") : curPerm;
+  while (queue.length) {
+    const [perm, val] = queue.pop();
+    visited[perm] = true;
 
-    for (
-      let reverseLength = 2;
-      reverseLength <= curPerm.length;
-      reverseLength++
-    ) {
+    if (perm.join(",") === desiredOutput) {
+      return val;
+    }
+
+    for (let reverseLength = 2; reverseLength <= perm.length; reverseLength++) {
       for (
         let startReverse = 0;
-        startReverse <= curPerm.length - reverseLength;
+        startReverse <= perm.length - reverseLength;
         startReverse++
       ) {
         const endReverse = startReverse + reverseLength;
         const newPerm = [
-          ...curPerm.slice(0, startReverse),
-          ...curPerm.slice(startReverse, endReverse).reverse(),
-          ...curPerm.slice(endReverse, curPerm.length),
+          ...perm.slice(0, startReverse),
+          ...perm.slice(startReverse, endReverse).reverse(),
+          ...perm.slice(endReverse, perm.length),
         ];
 
-        if (typeof dict[newPerm] !== "undefined") {
-          dict[newPerm] = Math.min(dict[newPerm], dict[curPerm] + 1);
-        } else {
-          dict[newPerm] = dict[curPerm] + 1;
-        }
-
-        if (newPerm.join(",") === desiredOutput) {
-          return dict[curPerm] + 1;
+        if (!visited[newPerm]) {
+          queue.unshift([newPerm, val + 1]);
         }
       }
     }
   }
+
+  throw new Error("Unsolvable");
 }
 
-function minOperations(arr) {
-  dict[arr] = 0;
-  return computePermutations(arr);
-}
-
-const res = minOperations([1, 2, 3, 5, 4]);
-
+const res = minOperations([8, 1, 7, 2, 6, 3, 5, 4]);
 console.log("res: ", res);
-console.log(JSON.stringify(dict, null, 2));
