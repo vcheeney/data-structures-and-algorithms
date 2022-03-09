@@ -12,17 +12,12 @@ function minOperations(arr) {
       return val;
     }
 
-    for (let reverseLength = 2; reverseLength <= perm.length; reverseLength++) {
-      for (
-        let startReverse = 0;
-        startReverse <= perm.length - reverseLength;
-        startReverse++
-      ) {
-        const endReverse = startReverse + reverseLength;
+    for (let start = 0; start < perm.length; start++) {
+      for (let end = 2; end <= perm.length; end++) {
         const newPerm = [
-          ...perm.slice(0, startReverse),
-          ...perm.slice(startReverse, endReverse).reverse(),
-          ...perm.slice(endReverse, perm.length),
+          ...perm.slice(0, start),
+          ...perm.slice(start, end).reverse(),
+          ...perm.slice(end, perm.length),
         ];
 
         if (!visited[newPerm]) {
@@ -35,5 +30,5 @@ function minOperations(arr) {
   throw new Error("Unsolvable");
 }
 
-const res = minOperations([8, 1, 7, 2, 6, 3, 5, 4]);
+const res = minOperations([3, 1 2]);
 console.log("res: ", res);
