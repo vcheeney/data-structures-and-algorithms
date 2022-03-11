@@ -5,27 +5,18 @@
 function findMaxProduct(arr) {
   // Write your code here
 
-  const heap = []; // 7, 2, 4
+  let maxValues = [];
 
-  const output = arr.map((val, i) => {
-    // [2, 4, 7, 1, 5, 3];
-    heap.push(val);
-    // heapify
-    if (i > 0) {
-      let cur = i;
-      let parent = Math.floor((cur - 1) / 2);
-      while (heap[cur] > heap[parent] && cur > 0) {
-        [heap[cur], heap[parent]] = [heap[parent], heap[cur]];
-        cur = parent;
-        parent = Math.floor((cur - 1) / 2);
-      }
-    }
-    // return the product
+  return arr.map((val, i) => {
+    // Iterating over each element of the array => O(n)
+    maxValues.push(val);
     if (i < 2) return -1;
-    return heap.slice(0, 3).reduce((res, cur) => res * cur, 1);
+    if (maxValues.length > 3) {
+      maxValues.sort((a, b) => b - a); // O(4) => O(1) as we are sorting an array of fixed size
+      maxValues.pop();
+    }
+    return maxValues.reduce((res, cur) => res * cur, 1); // O(4) => O(1)
   });
-
-  return output;
 }
 
 // These are the tests we use to determine if the solution is correct.
